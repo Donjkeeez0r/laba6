@@ -1,0 +1,67 @@
+'''
+Задание состоит из двух частей.
+1 часть – написать программу в соответствии со своим вариантом задания. Написать 2 варианта формирования (алгоритмический и с помощью функций Питона), сравнив по времени их выполнение.
+2 часть – усложнить написанную программу, введя по своему усмотрению в условие минимум одно ограничение на характеристики объектов (которое будет сокращать количество переборов)  и целевую функцию для нахождения оптимального  решения.
+
+Вариант 2. Пароль состоит из 6 символов. Первые 2 – латинские буквы, остальные - латинские буквы или цифры. Составьте все возможные пароли.
+'''
+
+
+import itertools
+import string
+import timeit
+
+
+# 1 часть - функция для генерации паролей с использованием алгоритма
+def generate_passwords_algorithm():
+    passwords = []                    # пустой список для хранения паролей
+    letters = string.ascii_letters    # создание строки которая содержит все буквы
+    digits = string.digits            # создание строки которая содержит все цифры
+
+    for l1 in letters:
+        for l2 in letters:
+            for d1 in digits:
+                for d2 in digits:
+                    for d3 in digits:
+                        for d4 in digits:
+                            password = f"{l1}{l2}{d1}{d2}{d3}{d4}"
+                            passwords.append(password)
+
+    return passwords
+
+
+# 1 часть - функция для генерации паролей с использованием генератора списков
+def generate_passwords_pythonic():
+    letters = string.ascii_letters  # строка содержащая все буквы
+    digits = string.digits          # строка содержащая все цифры
+    passwords = [f"{l1}{l2}{d1}{d2}{d3}{d4}" for l1 in letters for l2 in letters
+                 for d1 in digits for d2 in digits for d3 in digits for d4 in digits] # генератор списка, который создает пароли, используя вложенные циклы for
+
+    return passwords
+
+
+# Определение времени выполнения для двух методов генерации паролей
+time_algorithm = timeit.timeit(generate_passwords_algorithm, number=1)
+time_pythonic = timeit.timeit(generate_passwords_pythonic, number=1)
+
+# Вывод времени выполнения для каждого метода
+print("Время выполнения метода с использованием алгоритма:", time_algorithm)
+print("Время выполнения метода с использованием генератора списков:", time_pythonic)
+
+
+# 2 часть - Функция для генерации паролей с усложнением
+def generate_passwords(length):
+    letters = string.ascii_letters # строка содержащая все буквы
+    digits = string.digits         # строка содержащая все цифры
+    passwords = ["".join(comb) for comb in itertools.product(letters, repeat=2)
+                 for digits_comb in itertools.product(digits, repeat=4)
+                 for comb in itertools.permutations(comb + digits_comb)] # генератор паролей, учитывая ограничение на длину и использованием функции itertools для комбинирования букв и цифр.
+
+    return passwords
+
+
+# Определение времени выполнения для генерации паролей длиной 6 символов
+time_6 = timeit.timeit(lambda: generate_passwords(6), number=1)
+
+# Вывод времени выполнения
+print("Время выполнения генерации паролей длиной 6 символов:", time_6)
