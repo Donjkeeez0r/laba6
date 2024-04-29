@@ -55,7 +55,7 @@ def generate_passwords(length):
     digits = string.digits         # строка содержащая все цифры
     passwords = ["".join(comb) for comb in itertools.product(letters, repeat=2)
                  for digits_comb in itertools.product(digits, repeat=4)
-                 for comb in itertools.permutations(comb + digits_comb)] # генератор паролей, учитывая ограничение на длину и использованием функции itertools для комбинирования букв и цифр.
+                 for comb in itertools.permutations(comb + digits_comb)] # генератор паролей, учитывая ограничение на длину и использованием функции itertools для комбинирования букв и цифр (перестановка)
 
     return passwords
 
