@@ -5,12 +5,11 @@
 
 Пароль состоит из 6 символов. Первые 2 – латинские буквы, остальные - латинские буквы или цифры. Составьте все возможные пароли.
 '''
-
 import string
 import random
 import timeit
+import itertools
 
-# 1 часть
 # Функция для генерации пароля с использованием алгоритмического подхода
 def generate_password_algorithm(num_passwords):
     passwords = []
@@ -41,18 +40,19 @@ def measure_time(func, num_passwords):
     func(num_passwords)                            # Выполнение функции
     return timeit.default_timer() - start_time     # Возвращение времени выполнения функции
 
-num_passwords = int(input("Введите количество паролей: "))
+# Указываем количество паролей
+num_passwords = 10
 
-print("1 часть: Генерация паролей до усложнения")
+print("1 часть: Генерация паролей до усложнения (первые 10 паролей):")
 generated_passwords_1 = generate_password_pythonic(num_passwords)
-for i, password in enumerate(generated_passwords_1):
+for i, password in enumerate(generated_passwords_1[:10]):
     print(f"Пароль {i+1}: {password}")
 
-# Измерение времени выполнения обеих функций
+# Измеряем время выполнения обеих функций
 time_algorithm = measure_time(generate_password_algorithm, num_passwords)
 time_pythonic = measure_time(generate_password_pythonic, num_passwords)
 
-# Вывод результатов
+# Вывод времени выполнения обеих функций
 print("\nВремя выполнения с использованием алгоритмического подхода:", time_algorithm)
 print("Время выполнения с использованием генератора списков:", time_pythonic)
 
@@ -68,9 +68,17 @@ def optimal_approach():
 # Вызывание функции для определения оптимального подхода
 optimal_approach()
 
-# 2 часть
-# Ограничение на характеристики пароля
+# Функция для подсчета количества всех возможных комбинаций пароля
+def count_all_possible_passwords():
+    num_letters = len(string.ascii_letters)
+    num_digits = len(string.digits)
+    total_combinations = num_letters ** 4 * (num_letters + num_digits) ** 2
+    return total_combinations
 
+# Вывод количества всех возможных комбинаций пароля
+print("Количество всех возможных комбинаций пароля:", count_all_possible_passwords())
+
+# 2 часть: Генерация паролей с учетом ограничения
 print("\n2 часть: Генерация паролей с учетом ограничения")
 def generate_password_with_constraint(num_passwords):
     passwords = []
@@ -87,7 +95,17 @@ def generate_password_with_constraint(num_passwords):
 time_with_constraint = measure_time(generate_password_with_constraint, num_passwords)
 print("Время выполнения с учетом ограничения:", time_with_constraint)
 
-# Вывод паролей
+# Вывод первых 10 паролей
 generated_passwords_2 = generate_password_with_constraint(num_passwords)
-for i, password in enumerate(generated_passwords_2):
+print("Первые 10 паролей с учетом ограничения:")
+for i, password in enumerate(generated_passwords_2[:10]):
     print(f"Пароль {i+1}: {password}")
+
+# Функция для подсчета количества всех возможных комбинаций пароля с ограничением
+def count_all_possible_passwords_with_constraint():
+    num_letters = len(string.ascii_letters)
+    total_combinations = num_letters ** 3 * (num_letters + 10) ** 3
+    return total_combinations
+
+# Вывод количества всех возможных комбинаций пароля с ограничением
+print("\nКоличество всех возможных комбинаций пароля с учетом ограничения:", count_all_possible_passwords_with_constraint())
